@@ -4,33 +4,32 @@
 
 // Changes here require a server restart.
 // To restart press CTRL + C in terminal and run `gridsome develop`
-const axios = require('axios')
 const config = require('./src/config')
+const request = require('./src/utils/request')
 const moment = require('moment')
 const MarkdownIt = require('markdown-it');
-
-const request = axios.create({
-  baseURL: "https://api.github.com",
-  timeout: 15000
-})
 
 module.exports = api => {
   
   // 加载 gist
   api.loadSource(async ({ addCollection }) => {
     const collection = addCollection('gist')
-    const { data } = await request(`/users/${config.USERNAME}/gists?access_token=${config.TOKEN}`)
-    // const md = new MarkdownIt();
+    const md = new MarkdownIt();
+
+    const { data } = await request(`/users/${config.USERNAME}/gists`)
+    const gistDetails = await Promise.all(data.map(v => request(`/gists/${v.id}`)))
 
     for (let i = 0; i < data.length; i++) {
-      for (let key in data[i].files) {
+      const item = data[i]
+
+      for (let key in item.files) {
         collection.addNode({
           title: key,
-          url: data[i].files[key],
-          // content: md.render(data[i].files[key]['content']),
-          description: data[i]['description'],
-          createTime: moment(data[i]['created_at']).format('YYYY-MM-DD mm:HH:SS'),
-          updateTime: moment(data[i]['updated_at']).format('YYYY-MM-DD mm:HH:SS'),
+          url: item.files[key],
+          content: md.render(gistDetails[i].data.files[key].content),
+          description: item.description,
+          createTime: moment(item.created_at).format('YYYY-MM-DD HH:mm:SS'),
+          updateTime: moment(item.updated_at).format('YYYY-MM-DD HH:mm:SS'),
         })
         break
       }
@@ -40,7 +39,7 @@ module.exports = api => {
   // 加载 project
   api.loadSource(async ({ addCollection }) => {
     const collection = addCollection('project')
-    const { data } = await request(`users/${config.USERNAME}/repos?access_token=${config.TOKEN}`)
+    const { data } = await request(`users/${config.USERNAME}/repos`)
 
     for (let i = 0; i < data.length; i++) {
       let item = data[i]
@@ -55,8 +54,8 @@ module.exports = api => {
         forksCount: item['forks_count'],
         language: item['language'],
         license: item['license'] ? item['license']['spdx_id'] : '',
-        createTime: moment(item['created_at']).format('YYYY-MM-DD mm:HH:SS'),
-        updateTime: moment(item['updated_at']).format('YYYY-MM-DD mm:HH:SS'),
+        createTime: moment(item['created_at']).format('YYYY-MM-DD HH:mm:SS'),
+        updateTime: moment(item['updated_at']).format('YYYY-MM-DD HH:mm:SS'),
       })
     }
   })
@@ -64,7 +63,7 @@ module.exports = api => {
   // 加载 followers
   api.loadSource(async ({ addCollection }) => {
     const collection = addCollection('followers')
-    const { data } = await request(`/users/${config.USERNAME}/followers?access_token=${config.TOKEN}`)
+    const { data } = await request(`/users/${config.USERNAME}/followers`)
 
     data.forEach(item => {
       collection.addNode({
@@ -78,7 +77,7 @@ module.exports = api => {
   // 加载 following
   api.loadSource(async ({ addCollection }) => {
     const collection = addCollection('following')
-    const { data } = await request(`/users/${config.USERNAME}/following?access_token=${config.TOKEN}`)
+    const { data } = await request(`/users/${config.USERNAME}/following`)
 
     data.forEach(item => {
       collection.addNode({
@@ -93,7 +92,7 @@ module.exports = api => {
     // Use the Pages API here: https://gridsome.org/docs/pages-api/
     createPage({
       path: '/',
-      component: './src/pages/News.vue'
+      component: './src/pages/news.vue'
     })
   })
 }

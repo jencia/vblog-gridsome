@@ -1,11 +1,12 @@
 <template>
   <Layout>
     <div style="min-height: 600px">
+      <!-- 搜索功能暂时不做
       <el-card shadow="never" style="margin-bottom: 20px">
         <el-input placeholder="请输入关键字" v-model="searchKey" clearable style="width: 300px"></el-input>
-        <!-- <el-button @click="search" icon="el-icon-search" style="margin-left: 10px" circle plain></el-button> -->
+        <el-button @click="search" icon="el-icon-search" style="margin-left: 10px" circle plain></el-button>
         <el-button @click="$share()" style="margin-left: 10px" icon="el-icon-share" type="warning" plain circle></el-button>
-      </el-card>
+      </el-card> -->
 
       <div v-if="$page.allGist.edges.length > 0">
         <el-card shadow="hover" v-for="item in $page.allGist.edges" :key="item.node.id" style="margin-bottom: 20px">
@@ -84,10 +85,10 @@ export default {
   metaInfo: {
     title: '代码分享'
   },
-  data () {
-    return {
-      searchKey: ''
-    }
-  }
+  // data () {
+  //   return {
+  //     searchKey: ''
+  //   }
+  // }
 }
 </script>

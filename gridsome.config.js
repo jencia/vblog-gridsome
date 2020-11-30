@@ -7,6 +7,15 @@
 module.exports = {
   siteName: 'Jencia的个人博客',
   icon: {
-    favicon: './src/my-favicon.png'
+    favicon: './src/favicon.png'
+  },
+  pathPrefix: '/vblog-gridsome',
+  templates: {
+    gist: [
+      {
+        path: '/gist/:id',
+        component: './src/templates/gist.vue'
+      }
+    ]
   }
 }

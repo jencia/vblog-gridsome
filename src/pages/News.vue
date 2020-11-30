@@ -30,6 +30,7 @@ query {
       node {
         id
         title
+        content
         description
         createTime
         updateTime

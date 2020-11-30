@@ -1,11 +1,12 @@
 <template>
   <Layout>
     <div style="min-height: 600px">
+      <!-- 搜索功能暂时不做
       <el-card shadow="never" style="margin-bottom: 20px">
         <el-input placeholder="请输入关键字" v-model="searchKey" clearable style="width: 300px"></el-input>
-        <!-- <el-button @click="search" icon="el-icon-search" style="margin-left: 10px" circle plain></el-button> -->
+        <el-button @click="search" icon="el-icon-search" style="margin-left: 10px" circle plain></el-button>
         <el-button @click="$share()" icon="el-icon-share" type="warning" style="margin-left: 10px" plain circle></el-button>
-      </el-card>
+      </el-card> -->
 
       <div v-if="$page.allProject.edges.length > 0">
         <el-card shadow="hover" v-for="item in $page.allProject.edges" :key="item.node.id" style="margin-bottom: 20px">
@@ -78,7 +79,7 @@
 
 <page-query>
 query ($page: Int) {
-  allProject (perPage: 5, page: $page) @paginate {
+  allProject (perPage: 5, page: $page, sortBy: "updateTime", order: DESC) @paginate {
     pageInfo {
       currentPage
       perPage
@@ -109,11 +110,11 @@ export default {
   metaInfo: {
     title: '开源项目'
   },
-  data() {
-    return {
-      searchKey: ''
-    }
-  },
+  // data() {
+  //   return {
+  //     searchKey: ''
+  //   }
+  // },
   methods: {
     goGithub(url) {
         window.open(url)

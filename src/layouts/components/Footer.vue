@@ -3,7 +3,7 @@
 		<el-row>
 			<el-col :span="10">
 				<div>
-					© 2020-2023 jencia&emsp;&emsp;
+					© 2020 jencia&emsp;&emsp;
 					<a href="https://github.com/jencia" target="_blank">Profile</a>&emsp;&emsp;
 					<a href="https://github.com/jencia/vblog" target="_blank">VBlog</a>
 				</div>
