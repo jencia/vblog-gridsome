@@ -5,7 +5,8 @@ const request = axios.create({
   baseURL: "https://api.github.com",
   timeout: 15000,
   headers: {
-    Authorization: 'token a75382a194c726139fb2ce42ca499bf61477e4ce'
+    // xxx 需换成真实的 token
+    Authorization: 'token xxx'
   }
 })
 
